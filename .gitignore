@@ -1,0 +1,62 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.pyo
+*.pyd
+*.pdb
+*.log
+*.sqlite3
+*.db
+*.env
+.env.*
+
+# VSCode
+.vscode/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# macOS
+.DS_Store
+
+# Node
+node_modules/
+*.tsbuildinfo
+
+# Frontend build
+frontend/build/
+frontend/dist/
+frontend/node_modules/
+
+# Docker
+*.pid
+
+# Logs
+*.log
+backend/logs/
+frontend/frontend.log
+backend/backend.log
+backend/server.log
+backend/venv
+
+# Uploads
+backend/uploads/
+
+# Others
+*.bak
+*.swp
+*.tmp
+*.orig
+
+# Ignore test outputs
+*.coverage
+coverage/
+
+# Ignore local config
+backend/config.json
