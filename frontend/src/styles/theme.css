@@ -1,0 +1,882 @@
+/* 主题变量 */
+:root {
+  /* 浅色主题 */
+  --primary-color: #007aff;
+  --secondary-color: #5856d6;
+  --success-color: #34c759;
+  --warning-color: #ff9500;
+  --error-color: #ff3b30;
+  --background-primary: #ffffff;
+  --background-secondary: #fbfbfd;
+  --background-tertiary: #f5f5f7;
+  --surface-primary: #ffffff;
+  --surface-secondary: #fafafa;
+  --border-color: #e5e5e7;
+  --text-primary: #1d1d1f;
+  --text-secondary: #333333;
+  --text-tertiary: #86868b;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.3);
+}
+
+[data-theme="dark"] {
+  /* 深色主题 */
+  --primary-color: #0a84ff;
+  --secondary-color: #5e5ce6;
+  --success-color: #32d74b;
+  --warning-color: #ff9f0a;
+  --error-color: #ff453a;
+  --background-primary: #000000;
+  --background-secondary: #1c1c1e;
+  --background-tertiary: #2c2c2e;
+  --surface-primary: #1c1c1e;
+  --surface-secondary: #2c2c2e;
+  --border-color: #38383a;
+  --text-primary: #f5f5f7;
+  --text-secondary: #d1d1d6;
+  --text-tertiary: #86868b;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.7);
+  --glass-bg: rgba(30, 30, 30, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+/* 全局样式 */
+body {
+  background: var(--background-primary);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+}
+
+/* 毛玻璃效果 */
+.glass-effect {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-md);
+}
+
+/* 渐变背景 */
+.gradient-bg {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 动态渐变动画 */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* 动态流动背景动画 */
+@keyframes flowGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  25% {
+    background-position: 100% 50%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  75% {
+    background-position: 0% 100%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* 页面背景动态渐变 */
+.flow-gradient-bg {
+  background: linear-gradient(-45deg, 
+    var(--primary-color), 
+    var(--secondary-color), 
+    #ff6b6b, 
+    #4ecdc4, 
+    #45b7d1, 
+    #96ceb4, 
+    #feca57, 
+    #ff9ff3
+  );
+  background-size: 400% 400%;
+  animation: flowGradient 20s ease infinite;
+}
+
+/* 页面容器 */
+.app-container {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.app-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(-45deg, 
+    var(--primary-color) 0%, 
+    var(--secondary-color) 25%, 
+    #ff6b6b 50%, 
+    #4ecdc4 75%, 
+    var(--primary-color) 100%
+  );
+  background-size: 400% 400%;
+  animation: flowGradient 25s ease infinite;
+  opacity: 0.05;
+  z-index: -1;
+}
+
+.animated-gradient {
+  background: linear-gradient(-45deg, var(--primary-color), var(--secondary-color), #ff6b6b, #4ecdc4);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+/* 悬浮效果 */
+.hover-lift {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* 按钮动画 */
+.button-pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 122, 255, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(0, 122, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 122, 255, 0);
+  }
+}
+
+/* 卡片效果 */
+.card-elevated {
+  background: var(--surface-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.card-elevated:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* 导航栏固定 */
+.fixed-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+/* 滚动时的导航栏效果 */
+.nav-scrolled {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-md);
+}
+
+/* 加载动画 */
+.loading-spinner {
+  border: 3px solid var(--border-color);
+  border-top: 3px solid var(--primary-color);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 渐变边框 */
+.gradient-border {
+  position: relative;
+  background: var(--surface-primary);
+  border-radius: 16px;
+  padding: 2px;
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  border-radius: 16px;
+  z-index: -1;
+  opacity: 0.8;
+}
+
+/* 玻璃态按钮 */
+.glass-button {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.glass-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .glass-effect {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  
+  .card-elevated {
+    border-radius: 12px;
+  }
+}
+
+/* 动画效果 */
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-up {
+  animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
+}
+
+/* Tab 样式美化 */
+.ant-tabs-tab {
+  border: none !important;
+  background: transparent !important;
+  transition: all 0.3s ease !important;
+  color: var(--text-secondary) !important;
+}
+
+.ant-tabs-tab:hover {
+  color: var(--primary-color) !important;
+  transform: translateY(-2px);
+}
+
+.ant-tabs-tab.ant-tabs-tab-active {
+  border-bottom: 2px solid var(--primary-color) !important;
+  color: var(--primary-color) !important;
+}
+
+.ant-tabs-ink-bar {
+  background: var(--primary-color) !important;
+}
+
+/* 暗黑模式下的Tab修复 */
+[data-theme="dark"] .ant-tabs-tab {
+  color: var(--text-secondary) !important;
+  padding: 12px 16px !important;
+  border-bottom: 2px solid transparent !important;
+  margin-bottom: 0 !important;
+}
+
+[data-theme="dark"] .ant-tabs-tab:hover {
+  color: var(--primary-color) !important;
+  border-bottom-color: transparent !important;
+}
+
+[data-theme="dark"] .ant-tabs-tab.ant-tabs-tab-active {
+  color: var(--primary-color) !important;
+  border-bottom: 2px solid var(--primary-color) !important;
+  margin-bottom: 0 !important;
+}
+
+/* Tab通用样式修复 */
+.ant-tabs-tab {
+  padding: 12px 16px !important;
+  border-bottom: 2px solid transparent !important;
+  margin-bottom: 0 !important;
+  transition: all 0.3s ease !important;
+}
+
+.ant-tabs-tab:hover {
+  border-bottom-color: transparent !important;
+}
+
+.ant-tabs-tab.ant-tabs-tab-active {
+  border-bottom: 2px solid var(--primary-color) !important;
+  margin-bottom: 0 !important;
+}
+
+/* Form 样式美化 */
+.ant-form-item-label > label {
+  color: var(--text-primary) !important;
+  font-weight: 500 !important;
+}
+
+.ant-select-selector {
+  border: 1px solid var(--border-color) !important;
+  background: var(--surface-primary) !important;
+  color: var(--text-primary) !important;
+  border-radius: 8px !important;
+  transition: all 0.3s ease !important;
+}
+
+.ant-select-selector:hover {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.1) !important;
+}
+
+.ant-select-focused .ant-select-selector {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2) !important;
+}
+
+/* 暗黑模式下的Select修复 */
+[data-theme="dark"] .ant-select-selector {
+  background: var(--surface-primary) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .ant-select-selection-item {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .ant-select-selection-placeholder {
+  color: var(--text-tertiary) !important;
+}
+
+/* Button 样式美化 */
+.ant-btn-primary {
+  background: var(--primary-color) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  transition: all 0.3s ease !important;
+}
+
+.ant-btn-primary:hover {
+  background: var(--secondary-color) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 122, 255, 0.3) !important;
+}
+
+/* 暗黑模式下的Button修复 */
+[data-theme="dark"] .ant-btn {
+  background: var(--surface-primary) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .ant-btn:hover {
+  background: var(--surface-secondary) !important;
+  border-color: var(--primary-color) !important;
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .ant-btn-text {
+  background: transparent !important;
+  border: none !important;
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .ant-btn-text:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: var(--primary-color) !important;
+}
+
+/* 上传区域美化 */
+.ant-upload-drag {
+  border: 2px dashed var(--border-color) !important;
+  background: var(--surface-secondary) !important;
+  border-radius: 12px !important;
+  transition: all 0.3s ease !important;
+}
+
+.ant-upload-drag:hover {
+  border-color: var(--primary-color) !important;
+  background: var(--surface-primary) !important;
+}
+
+/* 暗黑模式下的Upload修复 */
+[data-theme="dark"] .ant-upload-drag {
+  background: var(--surface-secondary) !important;
+  border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .ant-upload-drag:hover {
+  background: var(--surface-primary) !important;
+  border-color: var(--primary-color) !important;
+}
+
+[data-theme="dark"] .ant-upload-text {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .ant-upload-hint {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .ant-upload-drag-container {
+  background: transparent !important;
+}
+
+[data-theme="dark"] .ant-upload-drag .anticon {
+  color: var(--text-primary) !important;
+}
+
+/* 处理状态动画 */
+.status-indicator {
+  position: relative;
+  display: inline-block;
+}
+
+.status-indicator::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  border-radius: inherit;
+  opacity: 0.3;
+  animation: ripple 2s infinite;
+}
+
+@keyframes ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.3;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
+}
+
+/* 暗黑模式下的Dropdown菜单修复（原有部分） */
+
+/* 暗黑模式下的Tooltip修复 */
+[data-theme="dark"] .ant-tooltip-inner {
+  background: var(--surface-primary) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+[data-theme="dark"] .ant-tooltip-arrow-content {
+  background: var(--surface-primary) !important;
+  border-color: var(--border-color) !important;
+}
+
+/* 暗黑模式下的Typography修复 */
+[data-theme="dark"] .ant-typography {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .ant-typography-secondary {
+  color: var(--text-secondary) !important;
+}
+
+/* 暗黑模式下的通用文本颜色修复 */
+[data-theme="dark"] .ant-card {
+  background: var(--surface-primary) !important;
+  border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .ant-card-body {
+  background: var(--surface-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .ant-input {
+  background: var(--surface-primary) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .ant-input:hover {
+  border-color: var(--primary-color) !important;
+}
+
+[data-theme="dark"] .ant-input:focus {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.2) !important;
+}
+
+[data-theme="dark"] .ant-input::placeholder {
+  color: var(--text-tertiary) !important;
+}
+
+/* 暗黑模式下的平台标签修复 */
+[data-theme="dark"] .platform-tag {
+  background: var(--surface-secondary) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+[data-theme="dark"] .platform-tag:hover {
+  background: var(--surface-primary) !important;
+  border-color: var(--primary-color) !important;
+  color: var(--primary-color) !important;
+}
+
+/* 暗黑模式下的Switch修复 */
+[data-theme="dark"] .ant-switch {
+  background: var(--border-color) !important;
+}
+
+[data-theme="dark"] .ant-switch-checked {
+  background: var(--primary-color) !important;
+}
+
+/* ConfigModal 深色模式修复 */
+.config-modal .ant-modal-header {
+  background: var(--surface-primary) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+.config-modal .ant-modal-content {
+  background: var(--surface-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+.config-modal .ant-modal-title {
+  color: var(--text-primary) !important;
+}
+
+.config-modal .ant-modal-close {
+  color: var(--text-secondary) !important;
+}
+
+.config-modal .ant-modal-close:hover {
+  color: var(--text-primary) !important;
+}
+
+.config-modal .ant-modal-close-x {
+  color: var(--text-secondary) !important;
+}
+
+.config-modal .ant-modal-close-x:hover {
+  color: var(--text-primary) !important;
+}
+
+.config-modal .ant-card {
+  background: var(--surface-secondary) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+.config-modal .ant-card-body {
+  background: var(--surface-secondary) !important;
+  color: var(--text-primary) !important;
+}
+
+.config-modal .ant-form-item-label > label {
+  color: var(--text-primary) !important;
+}
+
+.config-modal .ant-input,
+.config-modal .ant-input-password,
+.config-modal .ant-select-selector,
+.config-modal .ant-input-number {
+  background: var(--surface-primary) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+.config-modal .ant-input::placeholder,
+.config-modal .ant-input-password::placeholder,
+.config-modal .ant-select-selection-placeholder {
+  color: var(--text-tertiary) !important;
+}
+
+.config-modal .ant-tabs-tab {
+  color: var(--text-secondary) !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+.config-modal .ant-tabs-tab:hover {
+  color: var(--primary-color) !important;
+}
+
+.config-modal .ant-tabs-tab.ant-tabs-tab-active {
+  color: var(--primary-color) !important;
+  border-bottom: 2px solid var(--primary-color) !important;
+}
+
+.config-modal .ant-tabs-ink-bar {
+  background: var(--primary-color) !important;
+}
+
+.config-modal .ant-slider {
+  color: var(--primary-color) !important;
+}
+
+.config-modal .ant-slider-rail {
+  background: var(--border-color) !important;
+}
+
+.config-modal .ant-slider-track {
+  background: var(--primary-color) !important;
+}
+
+.config-modal .ant-slider-handle {
+  background: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+/* 滑块标记数字颜色修复 */
+.config-modal .ant-slider-mark-text {
+  color: #ffffff !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+}
+
+.config-modal .ant-slider-mark-text-active {
+  color: var(--primary-color) !important;
+  font-weight: 600 !important;
+}
+
+.config-modal .ant-btn {
+  background: var(--surface-primary) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+.config-modal .ant-btn-primary {
+  background: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  color: white !important;
+}
+
+.config-modal .ant-btn:hover {
+  background: var(--surface-secondary) !important;
+  border-color: var(--primary-color) !important;
+}
+
+.config-modal .ant-btn-primary:hover {
+  background: var(--secondary-color) !important;
+  border-color: var(--secondary-color) !important;
+}
+
+.config-modal .ant-divider {
+  border-color: var(--border-color) !important;
+}
+
+.config-modal .ant-typography {
+  color: var(--text-primary) !important;
+}
+
+.config-modal .ant-alert {
+  background: var(--surface-secondary) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+.config-modal .ant-alert-message {
+  color: var(--text-primary) !important;
+}
+
+.config-modal .ant-alert-description {
+  color: var(--text-secondary) !important;
+}
+
+.config-modal .anticon {
+  color: var(--text-primary) !important;
+}
+
+/* API密钥输入框特殊样式 */
+.config-modal .ant-input-password.ant-input-password-without-prefix .ant-input {
+  padding-left: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  border-radius: 8px !important;
+}
+
+.config-modal .ant-input-password {
+  border: 1px solid var(--border-color) !important;
+  border-radius: 8px !important;
+  background: var(--surface-primary) !important;
+}
+
+.config-modal .ant-input-password:hover {
+  border-color: var(--primary-color) !important;
+  background: var(--surface-primary) !important;
+}
+
+.config-modal .ant-input-password:focus-within {
+  border-color: var(--primary-color) !important;
+  background: var(--surface-primary) !important;
+  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.2) !important;
+}
+
+.config-modal .ant-input-password .ant-input {
+  border: none !important;
+  background: transparent !important;
+}
+
+.config-modal .ant-input-password .ant-input:hover {
+  border-color: transparent !important;
+  background: transparent !important;
+}
+
+.config-modal .ant-input-password .ant-input:focus {
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* 模型参数数字输入框颜色修复 */
+.config-modal .ant-input-number {
+  background: var(--surface-primary) !important;
+  border-color: var(--border-color) !important;
+  color: #ffffff !important;
+}
+
+.config-modal .ant-input-number-input {
+  color: #ffffff !important;
+}
+
+.config-modal .ant-input-number:hover {
+  border-color: var(--primary-color) !important;
+}
+
+.config-modal .ant-input-number:focus {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.2) !important;
+}
+
+/* Dropdown 悬浮框深色模式修复 */
+[data-theme="dark"] .ant-dropdown {
+  background: var(--surface-primary) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 12px !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+[data-theme="dark"] .ant-dropdown-menu {
+  background: var(--surface-primary) !important;
+  border: none !important;
+  border-radius: 12px !important;
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .ant-dropdown-menu-item {
+  color: var(--text-primary) !important;
+  background: transparent !important;
+  border-radius: 8px !important;
+  margin: 4px 8px !important;
+}
+
+[data-theme="dark"] .ant-dropdown-menu-item:hover {
+  background: var(--surface-secondary) !important;
+  color: var(--primary-color) !important;
+}
+
+[data-theme="dark"] .ant-dropdown-arrow {
+  background: var(--surface-primary) !important;
+  border: 1px solid var(--border-color) !important;
+  width: 10px !important;
+  height: 10px !important;
+  transform: rotate(45deg) !important;
+}
+
+[data-theme="dark"] .ant-dropdown-arrow::before {
+  background: var(--surface-primary) !important;
+  width: 10px !important;
+  height: 10px !important;
+}
+
+/* 浅色模式下的Dropdown圆角修复 */
+.ant-dropdown {
+  border-radius: 12px !important;
+}
+
+.ant-dropdown-menu {
+  border-radius: 12px !important;
+}
+
+.ant-dropdown-menu-item {
+  border-radius: 8px !important;
+  margin: 4px 8px !important;
+}
