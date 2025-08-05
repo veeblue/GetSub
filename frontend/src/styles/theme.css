@@ -19,7 +19,7 @@
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
   --glass-bg: rgba(255, 255, 255, 0.8);
-  --glass-border: rgba(255, 255, 255, 0.3);
+  --glass-border: rgba(0, 0, 0, 0.08);
 }
 
 [data-theme="dark"] {
@@ -46,11 +46,14 @@
 }
 
 /* 全局样式 */
-body {
+html, body {
+  margin: 0;
+  padding: 0;
   background: var(--background-primary);
   color: var(--text-primary);
   transition: all 0.3s ease;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  overflow-x: hidden;
 }
 
 /* 毛玻璃效果 */
@@ -204,6 +207,9 @@ body {
   right: 0;
   z-index: 1000;
   transition: all 0.3s ease;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* 滚动时的导航栏效果 */
@@ -276,11 +282,353 @@ body {
   .card-elevated {
     border-radius: 12px;
   }
+
+  /* 导航栏移动端优化 */
+  .fixed-nav {
+    padding: 8px 16px !important;
+  }
+
+  .nav-dropdown-trigger {
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+  }
+
+  /* 主要内容区域移动端优化 */
+  .app-container {
+    padding-bottom: 80px;
+  }
+
+  /* 卡片和容器移动端优化 */
+  .card-elevated {
+    margin-bottom: 20px;
+    border-radius: 12px;
+  }
+
+  /* 表单控件移动端优化 */
+  .ant-form-item {
+    margin-bottom: 16px;
+  }
+
+  .ant-select-selector {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+
+  .ant-btn {
+    font-size: 14px;
+    padding: 8px 16px;
+    height: auto;
+  }
+
+  /* Tab 移动端优化 */
+  .ant-tabs-tab {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+  /* 上传区域移动端优化 */
+  .ant-upload-drag {
+    padding: 20px;
+  }
+
+  /* 进度条移动端优化 */
+  .ant-progress-line {
+    margin-bottom: 8px;
+  }
+
+  /* 字幕编辑器移动端优化 */
+  .subtitle-editor {
+    font-size: 12px;
+    padding: 12px;
+    min-height: 200px;
+  }
+
+  /* 处理状态移动端优化 */
+  .processing-status {
+    padding: 16px;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .processing-icon {
+    margin-right: 0;
+    margin-bottom: 8px;
+  }
+
+  /* 文件信息移动端优化 */
+  .file-info {
+    text-align: center;
+  }
+
+  /* 按钮组移动端优化 */
+  .button-group {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .button-group .ant-btn {
+    width: 100%;
+  }
+
+  /* 下拉菜单移动端优化 */
+  .ant-dropdown {
+    min-width: 200px;
+  }
+
+  .ant-dropdown-menu-item {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+  /* 警告信息移动端优化 */
+  .ant-alert {
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  /* 文本大小移动端优化 */
+  .text-responsive {
+    font-size: clamp(12px, 3vw, 16px);
+  }
+
+  .text-responsive-sm {
+    font-size: clamp(11px, 2.5vw, 14px);
+  }
+
+  .text-responsive-lg {
+    font-size: clamp(14px, 4vw, 18px);
+  }
+
+  .text-responsive-xl {
+    font-size: clamp(18px, 5vw, 24px);
+  }
+
+  /* 间距移动端优化 */
+  .spacing-responsive {
+    padding: 16px;
+  }
+
+  .spacing-responsive-sm {
+    padding: 12px;
+  }
+
+  .spacing-responsive-lg {
+    padding: 20px;
+  }
+
+  /* 图标大小移动端优化 */
+  .icon-responsive {
+    font-size: clamp(16px, 4vw, 24px);
+  }
+
+  .icon-responsive-sm {
+    font-size: clamp(12px, 3vw, 16px);
+  }
+
+  .icon-responsive-lg {
+    font-size: clamp(24px, 6vw, 32px);
+  }
+}
+
+/* 小屏幕设备 (576px 及以下) */
+@media (max-width: 576px) {
+  .fixed-nav {
+    padding: 6px 12px !important;
+  }
+
+  .nav-dropdown-trigger {
+    padding: 4px 8px !important;
+    font-size: 11px !important;
+  }
+
+  .card-elevated {
+    padding: 16px !important;
+    border-radius: 8px;
+  }
+
+  .ant-btn {
+    font-size: 13px;
+    padding: 6px 12px;
+  }
+
+  .ant-select-selector {
+    font-size: 13px;
+    padding: 4px 8px;
+  }
+
+  .ant-tabs-tab {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+
+  .text-responsive {
+    font-size: clamp(11px, 3vw, 14px);
+  }
+
+  .text-responsive-sm {
+    font-size: clamp(10px, 2.5vw, 12px);
+  }
+
+  .text-responsive-lg {
+    font-size: clamp(12px, 4vw, 16px);
+  }
+
+  .text-responsive-xl {
+    font-size: clamp(16px, 5vw, 20px);
+  }
+}
+
+/* 超小屏幕设备 (480px 及以下) */
+@media (max-width: 480px) {
+  .fixed-nav {
+    padding: 4px 8px !important;
+  }
+
+  .nav-dropdown-trigger {
+    padding: 3px 6px !important;
+    font-size: 10px !important;
+  }
+
+  .card-elevated {
+    padding: 12px !important;
+    border-radius: 8px;
+  }
+
+  .ant-btn {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+
+  .ant-select-selector {
+    font-size: 12px;
+    padding: 3px 6px;
+  }
+
+  .ant-tabs-tab {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+
+  .text-responsive {
+    font-size: clamp(10px, 3vw, 12px);
+  }
+
+  .text-responsive-sm {
+    font-size: clamp(9px, 2.5vw, 11px);
+  }
+
+  .text-responsive-lg {
+    font-size: clamp(11px, 4vw, 14px);
+  }
+
+  .text-responsive-xl {
+    font-size: clamp(14px, 5vw, 18px);
+  }
 }
 
 /* 动画效果 */
 .fade-in {
   animation: fadeIn 0.5s ease-in;
+}
+
+/* 语言选择器移动端优化 */
+.language-switcher-mobile {
+  min-height: clamp(32px, 8vw, 40px) !important;
+}
+
+.language-dropdown-mobile {
+  z-index: 9999 !important;
+}
+
+.language-dropdown-mobile .ant-dropdown-menu {
+  max-height: 300px;
+  overflow-y: auto;
+  min-width: 180px;
+}
+
+.language-dropdown-mobile .ant-dropdown-menu-item {
+  padding: 8px 12px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* 超小屏幕下隐藏文本只显示图标 */
+@media (max-width: 380px) {
+  .language-switcher-mobile span {
+    display: none !important;
+  }
+  
+  .language-switcher-mobile {
+    padding: 6px 8px !important;
+    min-width: 32px !important;
+    justify-content: center !important;
+  }
+}
+
+/* 确保语言切换器按钮与其他按钮样式一致 */
+.nav-dropdown-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+}
+
+.nav-dropdown-trigger:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+/* 移动端响应式优化 */
+@media (max-width: 768px) {
+  .nav-dropdown-trigger {
+    padding: 6px 12px;
+    border-radius: 8px;
+    gap: 6px;
+  }
+  
+  .nav-dropdown-trigger span {
+    font-size: 12px;
+  }
+  
+  .nav-dropdown-trigger .anticon {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 576px) {
+  .nav-dropdown-trigger {
+    padding: 4px 8px;
+    gap: 4px;
+  }
+  
+  .nav-dropdown-trigger span {
+    font-size: 11px;
+  }
+  
+  .nav-dropdown-trigger .anticon {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-dropdown-trigger {
+    padding: 3px 6px;
+    gap: 3px;
+  }
+  
+  .nav-dropdown-trigger span {
+    font-size: 10px;
+  }
+  
+  .nav-dropdown-trigger .anticon {
+    font-size: 11px;
+  }
 }
 
 @keyframes fadeIn {
@@ -315,17 +663,69 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--background-secondary);
+  background: transparent;
+  margin: 0;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border-color);
+  background: var(--text-tertiary);
   border-radius: 4px;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+  min-height: 40px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-tertiary);
+  background: var(--text-secondary);
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
 }
+
+/* 深色模式下的滚动条增强 */
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: var(--text-secondary);
+  opacity: 1 !important;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: var(--text-primary);
+  opacity: 1 !important;
+}
+
+/* 确保滚动条不覆盖导航栏且不遮挡内容 */
+html {
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+}
+
+/* 隐藏滚动条轨道但保持功能 */
+::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 0;
+  border: none;
+  box-shadow: none;
+}
+
+/* 确保滚动条不占用额外空间 */
+html, body {
+  overflow-y: scroll;
+  scrollbar-width: thin; /* Firefox */
+}
+
+/* 针对Safari的特殊处理 */
+@supports (-webkit-touch-callout: none) {
+  html {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  body {
+    overflow-y: auto;
+  }
+}
+
 
 /* Tab 样式美化 */
 .ant-tabs-tab {

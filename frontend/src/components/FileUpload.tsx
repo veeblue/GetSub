@@ -62,7 +62,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
           border: '1px solid var(--error-color)',
           borderRadius: '8px',
           padding: '16px',
-          marginBottom: '24px',
+          marginBottom: '20px',
           display: 'flex',
           alignItems: 'flex-start',
           gap: '12px'
@@ -81,10 +81,10 @@ const FileUpload: React.FC<FileUploadProps> = ({
             <span style={{ color: 'white', fontSize: '12px', fontWeight: 'bold' }}>!</span>
           </div>
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '4px' }}>
+            <div style={{ fontSize: 'clamp(12px, 3vw, 14px)', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '4px' }}>
               上传错误
             </div>
-            <div style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>
+            <div style={{ fontSize: 'clamp(11px, 2.5vw, 14px)', color: 'var(--text-secondary)' }}>
               {error}
             </div>
           </div>
@@ -95,7 +95,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
         <div style={{
           border: '2px dashed var(--border-color)',
           borderRadius: '12px',
-          padding: '40px',
+          padding: '40px 20px',
           textAlign: 'center',
           background: 'var(--surface-secondary)',
           transition: 'all 0.3s',
@@ -110,13 +110,13 @@ const FileUpload: React.FC<FileUploadProps> = ({
           e.currentTarget.style.background = 'var(--surface-secondary)';
         }}>
           <Dragger {...uploadProps} style={{ border: 'none', background: 'transparent' }}>
-            <div style={{ fontSize: '48px', color: 'var(--primary-color)', marginBottom: '16px' }}>
+            <div style={{ fontSize: 'clamp(32px, 8vw, 48px)', color: 'var(--primary-color)', marginBottom: '16px' }}>
               <InboxOutlined />
             </div>
-            <div style={{ fontSize: '16px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '8px' }}>
+            <div style={{ fontSize: 'clamp(14px, 4vw, 16px)', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '8px' }}>
               点击或拖拽文件到此区域上传
             </div>
-            <div style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>
+            <div style={{ fontSize: 'clamp(12px, 3vw, 14px)', color: 'var(--text-secondary)' }}>
               支持单个文件上传，支持拖拽上传
             </div>
           </Dragger>
@@ -126,16 +126,16 @@ const FileUpload: React.FC<FileUploadProps> = ({
           background: 'var(--surface-secondary)',
           border: '1px solid var(--border-color)',
           borderRadius: '12px',
-          padding: '32px',
+          padding: '24px 16px',
           textAlign: 'center'
         }}>
-          <div style={{ fontSize: '48px', marginBottom: '16px', color: 'var(--primary-color)' }}>
+          <div style={{ fontSize: 'clamp(32px, 8vw, 48px)', marginBottom: '16px', color: 'var(--primary-color)' }}>
             {isVideoFile(fileInfo) ? <VideoCameraOutlined /> : <AudioOutlined />}
           </div>
-          <div style={{ fontSize: '18px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '8px' }}>
+          <div style={{ fontSize: 'clamp(14px, 4vw, 18px)', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '8px', wordBreak: 'break-word' }}>
             {fileInfo.name}
           </div>
-          <div style={{ fontSize: '14px', color: 'var(--text-secondary)', marginBottom: '24px' }}>
+          <div style={{ fontSize: 'clamp(12px, 3vw, 14px)', color: 'var(--text-secondary)', marginBottom: '20px' }}>
             文件大小: {formatFileSize(fileInfo.size)} • 类型: {isVideoFile(fileInfo) ? '视频' : '音频'}
           </div>
           <Button 
@@ -145,10 +145,10 @@ const FileUpload: React.FC<FileUploadProps> = ({
               color: 'white',
               border: 'none',
               borderRadius: '8px',
-              fontSize: '14px',
+              fontSize: 'clamp(12px, 3vw, 14px)',
               fontWeight: 500,
               height: 'auto',
-              padding: '8px 16px'
+              padding: 'clamp(6px, 2vw, 8px) clamp(12px, 3vw, 16px)'
             }}
           >
             重新选择文件
@@ -156,19 +156,19 @@ const FileUpload: React.FC<FileUploadProps> = ({
         </div>
       )}
       
-      <div style={{ marginTop: '24px' }}>
-        <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '12px' }}>
+      <div style={{ marginTop: '20px' }}>
+        <div style={{ fontSize: 'clamp(12px, 3vw, 14px)', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '12px' }}>
           支持的格式：
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <div style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>
+          <div style={{ fontSize: 'clamp(11px, 2.5vw, 14px)', color: 'var(--text-secondary)' }}>
             🎵 音频：MP3, WAV, M4A, FLAC, OGG
           </div>
-          <div style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>
+          <div style={{ fontSize: 'clamp(11px, 2.5vw, 14px)', color: 'var(--text-secondary)' }}>
             🎬 视频：MP4, AVI, MOV, MKV, WMV, FLV, WEBM
           </div>
         </div>
-        <div style={{ marginTop: '12px', fontSize: '14px', color: 'var(--text-secondary)' }}>
+        <div style={{ marginTop: '12px', fontSize: 'clamp(11px, 2.5vw, 14px)', color: 'var(--text-secondary)' }}>
           最大文件大小：{formatFileSize(maxSize)}
         </div>
       </div>

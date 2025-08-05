@@ -4,7 +4,9 @@ import {
   getConfig,
   saveConfig,
   updateConfig,
-  getConfigStatus
+  getConfigStatus,
+  validateConfig,
+  useEnvironmentConfig
 } from '../services/api';
 import { APIConfig, APIConfigResponse } from '../types';
 
@@ -23,6 +25,14 @@ export const useConfig = () => {
     queryKey: ['config-status'],
     queryFn: getConfigStatus,
     retry: false,
+  });
+
+  // 验证配置
+  const { data: configValidation, refetch: validateConfigRefetch } = useQuery({
+    queryKey: ['config-validation'],
+    queryFn: validateConfig,
+    retry: false,
+    enabled: false, // 手动触发
   });
 
   // 保存配置
@@ -59,13 +69,33 @@ export const useConfig = () => {
     },
   });
 
+  // 使用环境配置
+  const useEnvironmentConfigMutation = useMutation({
+    mutationFn: useEnvironmentConfig,
+    onSuccess: (data: any) => {
+      if (data.success) {
+        message.success('已切换到环境变量配置');
+        queryClient.invalidateQueries({ queryKey: ['config'] });
+        queryClient.invalidateQueries({ queryKey: ['config-status'] });
+      } else {
+        message.error(data.message || '切换到环境配置失败');
+      }
+    },
+    onError: (error: any) => {
+      message.error(error.response?.data?.message || '切换到环境配置失败');
+    },
+  });
+
   return {
     config: config?.config,
     configStatus,
+    configValidation,
     isLoading,
     error,
     saveConfig: saveConfigMutation.mutate,
     updateConfig: updateConfigMutation.mutate,
-    isSaving: saveConfigMutation.isPending || updateConfigMutation.isPending,
+    validateConfig: validateConfigRefetch,
+    useEnvironmentConfig: useEnvironmentConfigMutation.mutate,
+    isSaving: saveConfigMutation.isPending || updateConfigMutation.isPending || useEnvironmentConfigMutation.isPending,
   };
 };

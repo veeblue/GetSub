@@ -535,9 +535,9 @@ const AppContent: React.FC = () => {
   };
 
   return (
-    <Layout style={{ minHeight: '100vh', background: 'var(--background-primary)' }} className="app-container">
+    <Layout style={{ minHeight: '100vh', background: 'var(--background-primary)', margin: 0, padding: 0 }} className="app-container">
       <Header className={`fixed-nav ${isScrolled ? 'nav-scrolled' : ''} glass-effect`} style={{ 
-        padding: '16px 60px',
+        padding: '12px 20px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -546,6 +546,8 @@ const AppContent: React.FC = () => {
         marginTop: '0',
         marginLeft: '0',
         marginRight: '0',
+        left: '0',
+        right: '0',
         transition: 'all 0.3s ease'
       }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -579,26 +581,46 @@ const AppContent: React.FC = () => {
           </Title>
         </div>
         
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <LanguageSwitcher />
-          <ThemeSwitcher />
-          <Button
-            type="text"
-            icon={<SettingOutlined />}
-            onClick={() => setConfigModalVisible(true)}
-            style={{
-              color: 'var(--text-primary)',
-              fontSize: '16px',
-              padding: '8px 12px',
-              borderRadius: '8px',
-              border: '1px solid var(--border-color)',
-              background: 'var(--surface-secondary)',
-              transition: 'all 0.3s ease'
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <LanguageSwitcher />
+        <ThemeSwitcher />
+          <div
+            className="nav-dropdown-trigger"
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '8px', 
+              padding: '8px 16px', 
+              borderRadius: '12px', 
+              cursor: 'pointer', 
+              transition: 'all 0.3s ease', 
+              border: '1px solid var(--glass-border)', 
+              background: 'var(--glass-bg)', 
+              backdropFilter: 'blur(10px)'
             }}
-            className="hover-lift"
+            onClick={() => setConfigModalVisible(true)}
+            onMouseEnter={(e) => { 
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'; 
+              e.currentTarget.style.transform = 'translateY(-1px)'; 
+            }} 
+            onMouseLeave={(e) => { 
+              e.currentTarget.style.background = 'var(--glass-bg)'; 
+              e.currentTarget.style.transform = 'translateY(0)'; 
+            }}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setConfigModalVisible(true);
+              }
+            }}
           >
-            {t('nav.settings')}
-          </Button>
+            <SettingOutlined style={{ color: 'var(--text-primary)', fontSize: '16px' }} />
+            <span style={{ color: 'var(--text-primary)', fontSize: '14px', fontWeight: 500 }}>
+              {t('nav.settings')}
+            </span>
+          </div>
         </div>
       </Header>
 
@@ -915,6 +937,7 @@ const AppContent: React.FC = () => {
                 }}>
                   <li style={{ marginBottom: '8px' }}>{t('feature.audio')}</li>
                   <li style={{ marginBottom: '8px' }}>{t('feature.video')}</li>
+                  <li style={{ marginBottom: '8px' }}>{t('feature.online')}</li>
                   <li style={{ marginBottom: '8px' }}>{t('feature.preview')}</li>
                   <li style={{ marginBottom: '8px' }}>{t('feature.translate')}</li>
                   <li style={{ marginBottom: '8px' }}>{t('feature.config')}</li>

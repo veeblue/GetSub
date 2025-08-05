@@ -41,13 +41,50 @@ const LanguageSwitcher: React.FC = () => {
     <Dropdown
       menu={{ items, onClick: ({ key }) => setLanguage(key as any) }}
       placement="bottomRight"
+      overlayClassName="language-dropdown-mobile"
+      getPopupContainer={(trigger) => trigger.parentNode as HTMLElement}
     >
-        <div className="nav-dropdown-trigger" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', cursor: 'pointer', transition: 'all 0.3s ease', border: '1px solid var(--glass-border)', background: 'var(--glass-bg)', backdropFilter: 'blur(10px)' }} onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'; e.currentTarget.style.transform = 'translateY(-1px)'; }} onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--glass-bg)'; e.currentTarget.style.transform = 'translateY(0)'; }}>
-        <GlobalOutlined style={{ color: 'var(--text-primary)', fontSize: '16px' }} />
-        <span style={{ color: 'var(--text-primary)', fontSize: '14px', fontWeight: 500 }}>
+      <button 
+        className="nav-dropdown-trigger"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          padding: '8px 16px',
+          borderRadius: '12px',
+          cursor: 'pointer',
+          transition: 'all 0.3s ease',
+          border: '1px solid var(--glass-border)',
+          background: 'var(--glass-bg)',
+          backdropFilter: 'blur(10px)'
+        }}
+        onMouseEnter={(e) => { 
+          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'; 
+          e.currentTarget.style.transform = 'translateY(-1px)'; 
+        }} 
+        onMouseLeave={(e) => { 
+          e.currentTarget.style.background = 'var(--glass-bg)'; 
+          e.currentTarget.style.transform = 'translateY(0)'; 
+        }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            e.currentTarget.click();
+          }
+        }}
+      >
+        <GlobalOutlined style={{ 
+          color: 'var(--text-primary)', 
+          fontSize: '16px' 
+        }} />
+        <span style={{ 
+          color: 'var(--text-primary)', 
+          fontSize: '14px', 
+          fontWeight: 500
+        }}>
           {languageOptions.find(opt => opt.value === language)?.flag}
         </span>
-      </div>
+      </button>
     </Dropdown>
   );
 };

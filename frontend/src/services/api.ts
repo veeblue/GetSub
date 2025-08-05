@@ -75,6 +75,16 @@ export const getConfigStatus = async () => {
   return response.data;
 };
 
+export const validateConfig = async () => {
+  const response = await api.get('/config/validate');
+  return response.data;
+};
+
+export const useEnvironmentConfig = async () => {
+  const response = await api.post('/config/use-environment');
+  return response.data;
+};
+
 // 文件上传
 export const uploadFile = async (file: File): Promise<FileUploadResponse> => {
   const formData = new FormData();

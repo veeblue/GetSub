@@ -13,7 +13,8 @@ import {
   Typography,
   Card,
   Divider,
-  message
+  message,
+  Popconfirm
 } from 'antd';
 import { SettingOutlined, ApiOutlined, TranslationOutlined } from '@ant-design/icons';
 import { useConfig } from '../hooks/useConfig';
@@ -28,7 +29,8 @@ interface ConfigModalProps {
 }
 
 const ConfigModal: React.FC<ConfigModalProps> = ({ visible, onClose }) => {
-  const { config, configStatus, saveConfig, isSaving } = useConfig();
+  const { config, configStatus, configValidation, saveConfig, validateConfig, useEnvironmentConfig, isSaving } = useConfig();
+  const [isValidating, setIsValidating] = useState(false);
   const [form] = Form.useForm<APIConfig>();
   const [activeTab, setActiveTab] = useState('asr');
 
@@ -54,9 +56,38 @@ const ConfigModal: React.FC<ConfigModalProps> = ({ visible, onClose }) => {
     onClose();
   };
 
+  const handleValidate = async () => {
+    setIsValidating(true);
+    try {
+      await validateConfig();
+    } finally {
+      setIsValidating(false);
+    }
+  };
+
+  const handleSwitchToEnvironmentConfig = () => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEnvironmentConfig();
+  };
+
   React.useEffect(() => {
-    if (config && visible) {
-      form.setFieldsValue(config);
+    if (visible) {
+      if (config) {
+        form.setFieldsValue(config);
+      } else {
+        // 如果配置为空（来自环境变量），设置默认值
+        form.setFieldsValue({
+          asr_provider: 'ByteDance',
+          asr_base_url: 'https://openspeech.bytedance.com/api/v1/vc',
+          translation_provider: 'Qwen',
+          translation_model: 'qwen-plus',
+          translation_base_url: 'https://dashscope.aliyuncs.com/compatible-mode/v1',
+          translation_temperature: 0.3,
+          translation_max_tokens: 1000,
+          translation_top_p: 1.0,
+          translation_frequency_penalty: 0.0
+        });
+      }
     }
   }, [config, visible, form]);
 
@@ -71,7 +102,15 @@ const ConfigModal: React.FC<ConfigModalProps> = ({ visible, onClose }) => {
       open={visible}
       onCancel={onClose}
       footer={null}
-      width={800}
+      width={{ xs: '95%', sm: '90%', md: 800 }}
+      centered
+      styles={{
+        body: {
+          padding: '16px',
+          maxHeight: '90vh',
+          overflowY: 'auto'
+        }
+      }}
       style={{
         '--ant-modal-header-bg': 'var(--surface-primary)',
         '--ant-modal-content-bg': 'var(--surface-primary)',
@@ -80,11 +119,35 @@ const ConfigModal: React.FC<ConfigModalProps> = ({ visible, onClose }) => {
       } as React.CSSProperties}
       className="config-modal"
     >
-      {!configStatus?.configured && (
+      {configStatus?.config_from_env ? (
         <Alert
-          message="API 未配置"
-          description="请先配置语音识别和翻译服务的 API 密钥，否则无法使用字幕生成功能。"
-          type="warning"
+          message={
+            <span>
+              正在使用<span style={{ color: '#1890ff', fontWeight: 'bold' }}>默认配置</span>
+            </span>
+          }
+          description={
+            <span>
+              系统正在使用环境变量中的默认配置，您可以通过保存来设置自定义配置。
+            </span>
+          }
+          type="info"
+          showIcon
+          style={{ marginBottom: 16 }}
+        />
+      ) : (
+        <Alert
+          message={
+            <span>
+              正在使用<span style={{ color: '#1890ff', fontWeight: 'bold' }}>自定义配置</span>
+            </span>
+          }
+          description={
+            <span>
+              系统正在使用配置文件中的自定义配置，您可以修改配置或恢复默认配置。
+            </span>
+          }
+          type="success"
           showIcon
           style={{ marginBottom: 16 }}
         />
@@ -99,6 +162,7 @@ const ConfigModal: React.FC<ConfigModalProps> = ({ visible, onClose }) => {
         <Tabs
           activeKey={activeTab}
           onChange={setActiveTab}
+          centered={false}
           items={[
             {
               key: 'asr',
@@ -284,10 +348,53 @@ const ConfigModal: React.FC<ConfigModalProps> = ({ visible, onClose }) => {
           ]}
         />
         
-        <div style={{ textAlign: 'right', marginTop: 16 }}>
-          <Space>
+        {/* 配置验证结果显示 */}
+        {configValidation && (
+          <div style={{ marginTop: 16 }}>
+            <Alert
+              message={configValidation.valid ? "配置验证成功" : "配置验证失败"}
+              description={
+                <div>
+                  <div>语音识别: {configValidation.asr_valid ? "✅ 有效" : "❌ 无效"} - {configValidation.asr_message}</div>
+                  <div>翻译服务: {configValidation.translation_valid ? "✅ 有效" : "❌ 无效"} - {configValidation.translation_message}</div>
+                </div>
+              }
+              type={configValidation.valid ? "success" : "error"}
+              showIcon
+            />
+          </div>
+        )}
+        
+        <div style={{ marginTop: 16 }}>
+          {/* 移动端：恢复默认配置按钮在上，其他按钮在下 */}
+          <div style={{ marginBottom: 12, textAlign: 'center' }}>
+            <Popconfirm
+              title="确认恢复默认配置？"
+              description="这将删除当前的配置文件并恢复为默认配置。您确定要继续吗？"
+              onConfirm={handleSwitchToEnvironmentConfig}
+              okText="确认"
+              cancelText="取消"
+            >
+              <Button
+                type="default"
+                loading={isSaving}
+                style={{ width: '100%' }}
+              >
+                恢复默认配置
+              </Button>
+            </Popconfirm>
+          </div>
+          
+          {/* 其他按钮 */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', flexWrap: 'wrap' }}>
             <Button onClick={onClose}>
               取消
+            </Button>
+            <Button
+              onClick={handleValidate}
+              loading={isValidating}
+            >
+              验证配置
             </Button>
             <Button
               type="primary"
@@ -296,7 +403,7 @@ const ConfigModal: React.FC<ConfigModalProps> = ({ visible, onClose }) => {
             >
               保存配置
             </Button>
-          </Space>
+          </div>
         </div>
       </Form>
     </Modal>

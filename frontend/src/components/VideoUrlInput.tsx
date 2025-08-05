@@ -74,20 +74,10 @@ const VideoUrlInput: React.FC<VideoUrlInputProps> = ({
   const validateUrl = (url: string) => {
     if (!url) return true;
     
-    // 支持的音视频平台URL模式
-    const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+/;
-    const bilibiliRegex = /^(https?:\/\/)?(www\.)?(bilibili\.com)\/.+/;
-    const vimeoRegex = /^(https?:\/\/)?(www\.)?(vimeo\.com)\/.+/;
-    const videoRegex = /^(https?:\/\/).+\.(mp4|webm|ogg|avi|mov|mkv|flv)(\?.*)?$/;
-    const audioRegex = /^(https?:\/\/).+\.(mp3|wav|m4a|flac|aac|ogg)(\?.*)?$/;
+    // 仅支持直接音频文件URL
+    const audioRegex = /^(https?:\/\/).+\.(mp3|wav|m4a|flac|aac|ogg|wma)(\?.*)?$/;
     
-    return (
-      youtubeRegex.test(url) ||
-      bilibiliRegex.test(url) ||
-      vimeoRegex.test(url) ||
-      videoRegex.test(url) ||
-      audioRegex.test(url)
-    );
+    return audioRegex.test(url);
   };
 
   React.useEffect(() => {
@@ -112,7 +102,7 @@ const VideoUrlInput: React.FC<VideoUrlInputProps> = ({
       >
         <Form.Item
           name="url"
-          label={<span style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text-primary)' }}>音视频URL</span>}
+          label={<span style={{ fontSize: 'clamp(12px, 3vw, 14px)', fontWeight: 500, color: 'var(--text-primary)' }}>音频文件URL</span>}
           rules={[
             {
               validator: (_, value) => {
@@ -122,18 +112,18 @@ const VideoUrlInput: React.FC<VideoUrlInputProps> = ({
                 if (validateUrl(value)) {
                   return Promise.resolve();
                 }
-                return Promise.reject(new Error('请输入有效的音视频URL'));
+                return Promise.reject(new Error('请输入有效的音频文件URL'));
               }
             }
           ]}
         >
           <TextArea
-            placeholder="支持 YouTube、Bilibili、Vimeo 或直接音视频文件链接&#10;例如：&#10;• https://www.youtube.com/watch?v=...&#10;• https://www.bilibili.com/video/...&#10;• https://example.com/video.mp4&#10;• https://example.com/audio.mp3"
-            rows={4}
+            placeholder="仅支持直接音频文件链接，不支持视频平台&#10;支持的格式：&#10;• MP3: https://example.com/audio.mp3&#10;• WAV: https://example.com/audio.wav&#10;• M4A: https://example.com/audio.m4a&#10;• FLAC: https://example.com/audio.flac&#10;• OGG: https://example.com/audio.ogg&#10;• AAC: https://example.com/audio.aac&#10;• WMA: https://example.com/audio.wma"
+            rows={3}
             disabled={disabled}
             onChange={handleUrlChange}
             style={{
-              fontSize: '14px',
+              fontSize: 'clamp(12px, 3vw, 14px)',
               border: '1px solid var(--border-color)',
               borderRadius: '8px',
               resize: 'none',
@@ -148,22 +138,23 @@ const VideoUrlInput: React.FC<VideoUrlInputProps> = ({
 
       {/* 历史记录 */}
       {urlHistory.length > 0 && (
-        <div style={{ marginTop: '24px' }}>
+        <div style={{ marginTop: '20px' }}>
           <div style={{ 
             display: 'flex', 
             justifyContent: 'space-between', 
             alignItems: 'center',
             marginBottom: '12px' 
           }}>
-            <Text style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>最近使用</Text>
+            <Text style={{ fontSize: 'clamp(12px, 3vw, 14px)', color: 'var(--text-secondary)' }}>最近使用</Text>
             <Button
               type="text"
               size="small"
               onClick={clearHistory}
               icon={<DeleteOutlined />}
               style={{
-                fontSize: '12px',
-                color: 'var(--text-secondary)'
+                fontSize: 'clamp(10px, 2.5vw, 12px)',
+                color: 'var(--text-secondary)',
+                padding: '4px 8px'
               }}
             >
               清空
@@ -174,7 +165,7 @@ const VideoUrlInput: React.FC<VideoUrlInputProps> = ({
               <div
                 key={index}
                 style={{
-                  padding: '12px 16px',
+                  padding: 'clamp(8px, 2vw, 12px) clamp(12px, 3vw, 16px)',
                   background: 'var(--surface-secondary)',
                   borderRadius: '8px',
                   cursor: 'pointer',
@@ -194,7 +185,7 @@ const VideoUrlInput: React.FC<VideoUrlInputProps> = ({
                 <Text 
                   ellipsis={{ tooltip: url }}
                   style={{ 
-                    fontSize: '13px',
+                    fontSize: 'clamp(11px, 2.5vw, 13px)',
                     color: 'var(--text-primary)'
                   }}
                 >
@@ -206,7 +197,7 @@ const VideoUrlInput: React.FC<VideoUrlInputProps> = ({
         </div>
       )}
 
-      {/* 支持的平台 */}
+      {/* 支持的音频格式 */}
       <div className="platform-tag" style={{
         background: 'var(--surface-secondary)',
         border: '1px solid var(--border-color)',
@@ -215,14 +206,19 @@ const VideoUrlInput: React.FC<VideoUrlInputProps> = ({
         marginTop: '24px'
       }}>
         <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '8px' }}>
-          支持的音视频平台
+          支持的音频格式
         </div>
         <div style={{ fontSize: '12px', lineHeight: '1.6', color: 'var(--text-secondary)' }}>
-          <div style={{ marginBottom: '4px' }}>• <strong>YouTube</strong>: 所有公开视频</div>
-          <div style={{ marginBottom: '4px' }}>• <strong>Bilibili</strong>: 支持大部分视频</div>
-          <div style={{ marginBottom: '4px' }}>• <strong>Vimeo</strong>: 公开视频</div>
-          <div style={{ marginBottom: '4px' }}>• <strong>直接视频链接</strong>: MP4, WebM, OGG, AVI, MOV, MKV, FLV</div>
-          <div>• <strong>直接音频链接</strong>: MP3, WAV, M4A, FLAC, AAC, OGG</div>
+          <div style={{ marginBottom: '4px' }}>• <strong>MP3</strong>: 最常用的音频格式</div>
+          <div style={{ marginBottom: '4px' }}>• <strong>WAV</strong>: 无损音频格式</div>
+          <div style={{ marginBottom: '4px' }}>• <strong>M4A</strong>: Apple 音频格式</div>
+          <div style={{ marginBottom: '4px' }}>• <strong>FLAC</strong>: 无损压缩音频</div>
+          <div style={{ marginBottom: '4px' }}>• <strong>OGG</strong>: 开源音频格式</div>
+          <div style={{ marginBottom: '4px' }}>• <strong>AAC</strong>: 高级音频编码</div>
+          <div>• <strong>WMA</strong>: Windows Media Audio</div>
+        </div>
+        <div style={{ fontSize: '12px', color: 'var(--error-color)', marginTop: '12px' }}>
+          ⚠️ 仅支持直接音频文件链接，不支持 YouTube、Bilibili 等视频平台
         </div>
       </div>
     </div>
