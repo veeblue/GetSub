@@ -26,6 +26,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 import LanguageSwitcher from './components/LanguageSwitcher';
 import ThemeSwitcher from './components/ThemeSwitcher';
+import ConfigModal from './components/ConfigModal';
 import './styles/theme.css';
 
 import FileUpload from './components/FileUpload';
@@ -67,6 +68,7 @@ const AppContent: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [translateTargetLanguage, setTranslateTargetLanguage] = useState<string>('');
   const [isTranslating, setIsTranslating] = useState(false);
+  const [configModalVisible, setConfigModalVisible] = useState(false);
 
   const getLanguageOptions = () => {
     if (language === 'en') {
@@ -580,7 +582,24 @@ const AppContent: React.FC = () => {
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <LanguageSwitcher />
           <ThemeSwitcher />
-                  </div>
+          <Button
+            type="text"
+            icon={<SettingOutlined />}
+            onClick={() => setConfigModalVisible(true)}
+            style={{
+              color: 'var(--text-primary)',
+              fontSize: '16px',
+              padding: '8px 12px',
+              borderRadius: '8px',
+              border: '1px solid var(--border-color)',
+              background: 'var(--surface-secondary)',
+              transition: 'all 0.3s ease'
+            }}
+            className="hover-lift"
+          >
+            {t('nav.settings')}
+          </Button>
+        </div>
       </Header>
 
       <Content style={{ 
@@ -918,7 +937,12 @@ const AppContent: React.FC = () => {
         </div>
       </Footer>
 
-          </Layout>
+      {/* API配置模态框 */}
+      <ConfigModal
+        visible={configModalVisible}
+        onClose={() => setConfigModalVisible(false)}
+      />
+    </Layout>
   );
 };
 

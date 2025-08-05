@@ -16,21 +16,59 @@ class ConfigService:
         load_dotenv()
     
     def load_config(self) -> Optional[APIConfig]:
-        """从环境变量加载配置"""
+        """从文件或环境变量加载配置"""
         try:
+            # 首先尝试从文件加载
+            file_config = self.load_from_file()
+            if file_config:
+                self.config = file_config
+                return file_config
+            
+            # 如果文件不存在，尝试从环境变量加载
             env_config = self.load_from_env()
             if env_config:
                 self.config = env_config
                 return env_config
+            
             return None
         except Exception as e:
             print(f"Error loading config: {e}")
             return None
     
+    def load_from_file(self) -> Optional[APIConfig]:
+        """从文件加载配置"""
+        try:
+            config_dir = Path(__file__).parent.parent.parent
+            config_file = config_dir / "config.json"
+            
+            if not config_file.exists():
+                return None
+            
+            with open(config_file, 'r', encoding='utf-8') as f:
+                config_data = json.load(f)
+            
+            config = APIConfig(**config_data)
+            return config
+        except Exception as e:
+            print(f"Error loading config from file: {e}")
+            return None
+    
     def save_config(self, config: APIConfig) -> bool:
-        """保存配置 - 已禁用"""
-        print("Configuration saving is disabled. Using environment variables only.")
-        return False
+        """保存配置到文件"""
+        try:
+            config_dir = Path(__file__).parent.parent.parent
+            config_file = config_dir / "config.json"
+            
+            # 保存到文件
+            with open(config_file, 'w', encoding='utf-8') as f:
+                json.dump(config.dict(), f, ensure_ascii=False, indent=2)
+            
+            self.config = config
+            print(f"Configuration saved to {config_file}")
+            return True
+        except Exception as e:
+            print(f"Error saving config: {e}")
+            return False
     
     def load_from_env(self) -> Optional[APIConfig]:
         """从环境变量加载配置"""
@@ -69,9 +107,25 @@ class ConfigService:
         return self.config
     
     def update_config(self, **kwargs) -> Optional[APIConfig]:
-        """更新配置 - 已禁用"""
-        print("Configuration updating is disabled. Using environment variables only.")
-        return None
+        """更新配置"""
+        try:
+            current_config = self.get_config()
+            if not current_config:
+                return None
+            
+            # 更新配置
+            for key, value in kwargs.items():
+                if hasattr(current_config, key):
+                    setattr(current_config, key, value)
+            
+            # 保存更新后的配置
+            if self.save_config(current_config):
+                return current_config
+            
+            return None
+        except Exception as e:
+            print(f"Error updating config: {e}")
+            return None
     
     def is_configured(self) -> bool:
         """检查是否已配置"""
