@@ -17,13 +17,14 @@ config_service = ConfigService()
 async def get_config():
     """获取API配置"""
     try:
-        config = config_service.get_config()
+        # 使用安全配置获取，隐藏环境变量配置
+        config = config_service.get_safe_config()
         is_configured = config_service.is_configured()
         
         if not config:
             return APIConfigResponse(
-                success=False,
-                message="Configuration not found",
+                success=True,
+                message="Configuration loaded from environment variables",
                 config=None
             )
         
@@ -131,14 +132,49 @@ async def get_config_status():
     try:
         is_configured = config_service.is_configured()
         config = config_service.get_config()
+        safe_config = config_service.get_safe_config()
         
         return {
             "configured": is_configured,
             "has_asr_config": bool(config and config.asr_appid and config.asr_access_token),
             "has_translation_config": bool(config and config.translation_api_key),
             "asr_provider": config.asr_provider if config else None,
-            "translation_provider": config.translation_provider.value if config else None
+            "translation_provider": config.translation_provider.value if config else None,
+            "config_from_file": bool(safe_config),
+            "config_from_env": bool(config) and not bool(safe_config)
         }
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error checking configuration status: {str(e)}")
+
+
+@router.get("/config/validate")
+async def validate_config():
+    """验证API配置"""
+    try:
+        validation_result = config_service.validate_config()
+        return validation_result
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error validating configuration: {str(e)}")
+
+
+@router.post("/config/use-environment")
+async def use_environment_config():
+    """切换到使用环境变量配置"""
+    try:
+        success = config_service.use_environment_config()
+        
+        if success:
+            return {
+                "success": True,
+                "message": "Successfully switched to environment configuration"
+            }
+        else:
+            return {
+                "success": False,
+                "message": "Failed to switch to environment configuration"
+            }
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error switching to environment configuration: {str(e)}")

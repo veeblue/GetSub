@@ -70,6 +70,24 @@ class ConfigService:
             print(f"Error saving config: {e}")
             return False
     
+    def use_environment_config(self) -> bool:
+        """切换到使用环境变量配置"""
+        try:
+            # 删除配置文件
+            config_dir = Path(__file__).parent.parent.parent
+            config_file = config_dir / "config.json"
+            
+            if config_file.exists():
+                config_file.unlink()
+                print(f"Configuration file {config_file} deleted")
+            
+            # 重置配置，下次加载时会从环境变量读取
+            self.config = None
+            return True
+        except Exception as e:
+            print(f"Error switching to environment config: {e}")
+            return False
+    
     def load_from_env(self) -> Optional[APIConfig]:
         """从环境变量加载配置"""
         try:
@@ -106,6 +124,20 @@ class ConfigService:
             return self.load_config()
         return self.config
     
+    def get_safe_config(self) -> Optional[APIConfig]:
+        """获取安全的配置（隐藏环境变量中的敏感信息）"""
+        config = self.get_config()
+        if not config:
+            return None
+        
+        # 检查配置是否来自环境变量
+        env_config = self.load_from_env()
+        if env_config and config.dict() == env_config.dict():
+            # 如果配置来自环境变量，返回空值给前端
+            return None
+        
+        return config
+    
     def update_config(self, **kwargs) -> Optional[APIConfig]:
         """更新配置"""
         try:
@@ -138,3 +170,70 @@ class ConfigService:
             config.asr_access_token and
             config.translation_api_key
         )
+    
+    def validate_config(self) -> dict:
+        """验证API配置是否有效"""
+        config = self.get_config()
+        if not config:
+            return {
+                "valid": False,
+                "message": "Configuration not found",
+                "asr_valid": False,
+                "translation_valid": False
+            }
+        
+        # 验证ASR配置
+        asr_valid = False
+        asr_message = ""
+        
+        try:
+            # 验证ASR配置格式和基本有效性
+            if config.asr_appid and config.asr_access_token:
+                # 检查是否为测试值或明显无效的值
+                if config.asr_appid in ["1111", "test", "demo", ""]:
+                    asr_valid = False
+                    asr_message = "ASR AppID appears to be a test value"
+                elif config.asr_access_token in ["111111", "test", "demo", ""]:
+                    asr_valid = False
+                    asr_message = "ASR Access Token appears to be a test value"
+                elif len(config.asr_appid) < 5 or len(config.asr_access_token) < 10:
+                    asr_valid = False
+                    asr_message = "ASR credentials appear to be invalid (too short)"
+                else:
+                    asr_valid = True
+                    asr_message = "ASR configuration appears valid"
+            else:
+                asr_message = "ASR configuration incomplete"
+        except Exception as e:
+            asr_message = f"ASR validation error: {str(e)}"
+        
+        # 验证翻译配置
+        translation_valid = False
+        translation_message = ""
+        
+        try:
+            # 验证翻译配置格式和基本有效性
+            if config.translation_api_key and config.translation_model:
+                # 检查是否为测试值或明显无效的值
+                if config.translation_api_key in ["11111", "test", "demo", ""]:
+                    translation_valid = False
+                    translation_message = "Translation API key appears to be a test value"
+                elif len(config.translation_api_key) < 20:
+                    translation_valid = False
+                    translation_message = "Translation API key appears to be invalid (too short)"
+                else:
+                    translation_valid = True
+                    translation_message = "Translation configuration appears valid"
+            else:
+                translation_message = "Translation configuration incomplete"
+        except Exception as e:
+            translation_message = f"Translation validation error: {str(e)}"
+        
+        return {
+            "valid": asr_valid and translation_valid,
+            "message": "All configurations valid" if (asr_valid and translation_valid) else "Some configurations invalid",
+            "asr_valid": asr_valid,
+            "translation_valid": translation_valid,
+            "asr_message": asr_message,
+            "translation_message": translation_message
+        }

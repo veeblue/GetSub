@@ -12,6 +12,7 @@
 
 - 🎵 **音频/视频上传** - 支持拖拽上传音频和视频文件
 - 🎬 **视频处理** - 自动从视频中提取音频
+- 🔗 **在线音频URL** - 支持直接音频文件链接处理
 - 📝 **字幕预览** - 完整的字幕内容预览和编辑
 - 🌐 **多语言翻译** - 支持多种语言的字幕翻译
 - ⚙️ **API配置** - 灵活的API配置管理，支持界面化设置
@@ -143,6 +144,26 @@ TRANSLATION_FREQUENCY_PENALTY=0.0
 1. 访问 [字节跳动火山引擎](https://www.volcengine.com/)
 2. 注册并开通语音识别服务
 3. 创建应用获取 AppID 和 Access Token
+
+#### 📋 支持的音频格式
+**本地文件上传：**
+- 音频格式：MP3、WAV、M4A、FLAC、OGG、AAC、WMA
+- 视频格式：MP4、AVI、MOV、MKV、WMV、FLV、WEBM（自动提取音频）
+
+**在线URL处理：**
+- **仅支持直接音频文件链接**，URL必须以支持的音频扩展名结尾
+- 支持的格式：`.mp3`、`.wav`、`.m4a`、`.flac`、`.ogg`、`.aac`、`.wma`
+- **示例**：
+  - ✅ `https://example.com/audio.mp3`
+  - ✅ `https://cdn.example.com/sounds.wav`
+  - ❌ `https://www.bilibili.com/video/BV1xx411c7mu`（不支持视频平台）
+  - ❌ `https://example.com/page-with-audio`（非直接文件链接）
+
+#### ⚠️ 重要限制
+- URL必须是公开可访问的直接音频文件链接
+- 不支持需要登录或包含重定向的链接
+- 不支持B站、YouTube等视频平台URL
+- 仅支持上述列出的音频格式
 
 #### 大语言模型API
 - **DeepSeek**: [https://platform.deepseek.com/](https://platform.deepseek.com/)
